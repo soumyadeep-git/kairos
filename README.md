@@ -6,7 +6,7 @@ This project demonstrates the future of automated receptionists—moving away fr
 
 ## Live Demo
 
-**Frontend:** [kairos-voice.vercel.app](https://kairos-voice.vercel.app)
+**Web App:** [kairos-voice.vercel.app](https://kairos-voice.vercel.app)
 
 ## System Architecture
 

@@ -27,6 +27,12 @@ interface SummaryData {
   actions?: string[];
 }
 
+interface VoiceAgentProps {
+  token: string;
+  serverUrl: string;
+  onDisconnect: () => void;
+}
+
 function AvatarDisplay() {
   const { state, audioTrack } = useVoiceAssistant();
   const videoTracks = useTracks([Track.Source.Camera], { onlySubscribed: true });

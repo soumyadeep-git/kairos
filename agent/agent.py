@@ -106,7 +106,7 @@ def format_time_for_speech(time_str: str) -> str:
 class KairosAgent(Agent):
     """Natural voice scheduling assistant with human-like conversation skills"""
     
-    def __init__(self, room=None):
+    def __init__(self, room=None, participant_name=None):
         super().__init__(
             instructions="""You are Kairos, a friendly receptionist helping with appointments over the phone.
 
@@ -206,6 +206,7 @@ Just be a normal, friendly person on the phone. No tech talk!
         
         # Store room for data channel publishing
         self.room = room
+        self.participant_name = participant_name  # Name from frontend input
         
         # Initialize Supabase client
         supabase_url = os.getenv("SUPABASE_URL")
@@ -221,8 +222,10 @@ Just be a normal, friendly person on the phone. No tech talk!
         # Store conversation context
         self.current_user_phone = None
         self.current_user_id = None
-        self.current_user_name = None
+        self.current_user_name = participant_name  # Initialize with frontend name
         self.actions_taken = []  # Track actions for summary
+        
+        logger.info(f"[KairosAgent] Initialized with participant: {participant_name}")
     
     async def publish_tool_update(self, tool_name: str, data: dict):
         """Publish tool call update to frontend via data channel."""
@@ -250,8 +253,9 @@ Just be a normal, friendly person on the phone. No tech talk!
         """Look up user by phone number."""
         logger.info(f"[KairosAgent] identify_user called with: {phone_number}")
         
-        # Publish to UI
-        await self.publish_tool_update("identify_user", {"phone": phone_number})
+        # Publish to UI with actual name
+        display_name = self.participant_name or "User"
+        await self.publish_tool_update("identify_user", {"name": display_name, "phone": phone_number})
         
         self.current_user_phone = ''.join(c for c in phone_number if c.isdigit())
         
@@ -326,9 +330,11 @@ Just be a normal, friendly person on the phone. No tech talk!
             user_res = self.supabase.table("users").select("id, full_name").eq("phone_number", normalized_phone).execute()
             
             if not user_res.data:
+                # Use participant name from frontend, fallback to "Guest"
+                user_name = self.participant_name or self.current_user_name or "Guest"
                 insert_res = self.supabase.table("users").insert({
                     "phone_number": normalized_phone,
-                    "full_name": "Guest"
+                    "full_name": user_name
                 }).execute()
                 
                 if insert_res.data:

@@ -36,6 +36,14 @@ async def entrypoint(ctx: JobContext):
     
     await ctx.connect()
     logger.info("[Kairos] Connected to room")
+    
+    # Get user participant name
+    participant_name = None
+    for participant in ctx.room.remote_participants.values():
+        if not participant.identity.startswith("agent"):
+            participant_name = participant.identity
+            logger.info(f"[Kairos] User participant: {participant_name}")
+            break
 
     # Configure LLM (Groq via OpenAI compatibility)
     llm = openai.LLM(
@@ -66,8 +74,8 @@ async def entrypoint(ctx: JobContext):
         min_silence_duration=0.4,
     )
 
-    # Create agent with room reference for data channel
-    agent = KairosAgent(room=ctx.room)
+    # Create agent with room reference and user name
+    agent = KairosAgent(room=ctx.room, participant_name=participant_name)
     
     # Create session
     session = AgentSession(

@@ -22,7 +22,7 @@ The system follows a decoupled architecture where the "Brain" (Python Agent) run
 
 ## Technology Stack
 
-I selected a "Best-in-Class" stack to minimize latency and maximize naturalness.
+I used all the services that was included in the problem statement which are as follows:
 
 ### Backend (The Brain)
 
@@ -249,7 +249,3 @@ kairos/
 ├── Dockerfile
 └── README.md
 ```
-
-## License
-
-MIT License - Free for personal and commercial use.

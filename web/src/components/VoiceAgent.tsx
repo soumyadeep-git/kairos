@@ -124,9 +124,11 @@ function ToolCallsDisplay() {
         }
         
         setToolCalls((prev) => {
-          // Deduplicate: Don't add if exact same tool & data exists in last entry
-          const last = prev[prev.length - 1];
-          if (last && last.tool === data.tool && JSON.stringify(last.data) === JSON.stringify(data.data)) {
+          // Deduplicate: Don't add if same tool & data exists in any recent entry
+          const isDuplicate = prev.some(
+            (existing) => existing.tool === data.tool && JSON.stringify(existing.data) === JSON.stringify(data.data)
+          );
+          if (isDuplicate) {
             return prev;
           }
           return [...prev.slice(-4), data];

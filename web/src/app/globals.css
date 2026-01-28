@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 45, 36, 32;
+  --background-rgb: 255, 251, 240;
+}
+
+body {
+  color: theme('colors.foreground');
+  background: theme('colors.background');
+  font-family: 'Manrope', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Typography Overrides */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'DM Serif Display', serif;
+}
+
+/* Custom Utilities */
+.text-stroke {
+  -webkit-text-stroke: 1px theme('colors.border');
+  color: transparent;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(-2deg); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+}
+
+/* Animation Classes */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delay {
+  animation: float-reverse 7s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.animate-wiggle {
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+.animate-grain {
+  animation: grain 8s steps(10) infinite;
+}
+
+/* Custom Components */
+.btn-trendy {
+  @apply relative px-8 py-4 bg-accent text-foreground font-bold text-lg rounded-xl
+         border-2 border-border shadow-sketch transition-all duration-300
+         hover:-translate-y-1 hover:shadow-sketch-hover hover:bg-accent-hover
+         active:translate-y-0 active:shadow-sketch disabled:opacity-50 disabled:cursor-not-allowed
+         overflow-hidden;
+}
+
+.btn-trendy::after {
+  content: '';
+  @apply absolute inset-0 bg-white opacity-0 transition-opacity duration-300;
+}
+
+.btn-trendy:hover::after {
+  @apply opacity-10;
+}
+
+.card-trendy {
+  @apply bg-surface border-2 border-border rounded-3xl shadow-sketch p-8 relative;
+}
+
+.input-trendy {
+  @apply w-full px-5 py-4 bg-surface-alt border-2 border-border rounded-xl
+         text-foreground placeholder:text-muted font-medium outline-none
+         focus:bg-white focus:shadow-sketch-sm transition-all duration-300;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: theme('colors.background');
+  border-left: 2px solid theme('colors.border');
+}
+::-webkit-scrollbar-thumb {
+  background: theme('colors.accent');
+  border: 2px solid theme('colors.border');
+  border-radius: 5px;
+}
